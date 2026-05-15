@@ -7,12 +7,11 @@
 
 import Foundation
 
-struct AppState: Equatable {
-    var minValue: Double = 1
-    var maxValue: Double = 100
-    var currentNumber: Int? = nil
-    var isSpinning: Bool = false
-    var screen: Screen = .setup
-
+struct AppState {
     enum Screen { case setup, spin }
+    var screen: Screen = .setup
+    var minValue: Double = 1
+    var maxValue: Double = 1000
+    var currentNumber: Int? = nil
+    var isSpinning = false
 }

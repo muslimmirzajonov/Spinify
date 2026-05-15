@@ -11,25 +11,56 @@ import Combine
 @MainActor
 final class SpinifyViewModel: ObservableObject {
     @Published var state = AppState()
-    @Published var bgColor: Color = .init(hex: "#0f0c29")
+    @Published var bgColor: Color = .init(hex: "#6C00FF")
     @Published var numberScale: CGFloat = 1.0
     @Published var numberOpacity: Double = 1.0
 
+    @Published var langCode: String = {
+        if let saved = UserDefaults.standard.string(forKey: "spinify_lang_code"),
+           L10n.supported.contains(where: { $0.code == saved }) {
+            return saved
+        }
+        return L10n.resolvedCode()
+    }() {
+        didSet {
+            UserDefaults.standard.set(langCode, forKey: "spinify_lang_code")
+        }
+    }
+
     private let bgPalette: [Color] = [
-        .init(hex: "#0f0c29"), .init(hex: "#1a1a2e"), .init(hex: "#16213e"),
-        .init(hex: "#2c1654"), .init(hex: "#1e0a3c"), .init(hex: "#2d1b69"),
-        .init(hex: "#0a2e1a"), .init(hex: "#0f3028"), .init(hex: "#0a2a2a"),
-        .init(hex: "#0f2d35"), .init(hex: "#2a0a0a"), .init(hex: "#2e1015"),
-        .init(hex: "#1a1040"), .init(hex: "#1d1550"), .init(hex: "#0e0b2e"),
+        .init(hex: "#6C00FF"), // electric violet
+        .init(hex: "#0066FF"), // vivid blue
+        .init(hex: "#00C2FF"), // cyan
+        .init(hex: "#FF006E"), // hot pink
+        .init(hex: "#FF4500"), // orange red
+        .init(hex: "#FF9500"), // amber
+        .init(hex: "#00D084"), // emerald
+        .init(hex: "#00B4AA"), // teal
+        .init(hex: "#8B5CF6"), // soft purple
+        .init(hex: "#EC4899"), // rose
+        .init(hex: "#F59E0B"), // gold
+        .init(hex: "#10B981"), // green
+        .init(hex: "#3B82F6"), // blue
+        .init(hex: "#EF4444"), // red
+        .init(hex: "#A855F7"), // purple
+        .init(hex: "#14B8A6"), // teal-green
     ]
-    private var lastBgColor: Color = .init(hex: "#0f0c29")
+    private var lastBgColor: Color = .init(hex: "#6C00FF")
     private var spinTask: Task<Void, Never>?
+
+    func t(_ key: String) -> String { L10n.t(key, code: langCode) }
 
     private func nextBgColor() -> Color {
         let others = bgPalette.filter { $0 != lastBgColor }
         let next = others.randomElement() ?? bgPalette[0]
         lastBgColor = next
         return next
+    }
+
+    func openLanguageSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
     }
 
     func proceed() {
@@ -55,9 +86,9 @@ final class SpinifyViewModel: ObservableObject {
         let finalNumber = Int.random(in: Int(state.minValue)...Int(state.maxValue))
 
         let tickDelays: [UInt64] = [
-            90, 75, 60, 45, 35, 28,
-            28, 35, 50, 70, 95, 120,
-            150, 190, 240
+            200, 160, 120, 90, 65, 48, 38, 32, 28, 28,
+            28, 28, 32, 38, 48,
+            60, 80, 105, 135, 170, 210, 260
         ]
         let totalTicks = tickDelays.count
 
@@ -66,43 +97,50 @@ final class SpinifyViewModel: ObservableObject {
                 guard !Task.isCancelled else { return }
 
                 let delayMs = tickDelays[tick]
-                try? await Task.sleep(nanoseconds: delayMs * 1_000_000)
-                guard !Task.isCancelled else { return }
 
-                withAnimation(.easeOut(duration: 0.05)) {
-                    numberOpacity = 0.15
-                    numberScale = 0.82
+                withAnimation(.easeIn(duration: Double(delayMs) * 0.0004)) {
+                    numberOpacity = 0.0
+                    numberScale = 0.88
                 }
-                try? await Task.sleep(nanoseconds: 35_000_000)
+
+                try? await Task.sleep(nanoseconds: (delayMs / 2) * 1_000_000)
                 guard !Task.isCancelled else { return }
 
-                withAnimation(.spring(response: 0.18, dampingFraction: 0.65)) {
-                    state.currentNumber = Int.random(in: Int(state.minValue)...Int(state.maxValue))
+                state.currentNumber = Int.random(in: Int(state.minValue)...Int(state.maxValue))
+
+                withAnimation(.easeOut(duration: Double(delayMs) * 0.0004)) {
                     numberOpacity = 1.0
                     numberScale = 1.0
                 }
+
                 HapticManager.shared.playTick()
 
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    bgColor = nextBgColor()
+                if tick % 3 == 0 {
+                    withAnimation(.easeInOut(duration: 0.4)) {
+                        bgColor = nextBgColor()
+                    }
                 }
+
+                try? await Task.sleep(nanoseconds: (delayMs / 2) * 1_000_000)
             }
 
-            withAnimation(.easeOut(duration: 0.1)) {
+            withAnimation(.easeIn(duration: 0.12)) {
                 numberOpacity = 0.0
-                numberScale = 0.5
+                numberScale = 0.7
             }
-            try? await Task.sleep(nanoseconds: 100_000_000)
+            try? await Task.sleep(nanoseconds: 130_000_000)
 
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.45)) {
-                state.currentNumber = finalNumber
-                numberOpacity = 1.0
-                numberScale = 1.3
-            }
+            state.currentNumber = finalNumber
             HapticManager.shared.playFinalReveal()
-            try? await Task.sleep(nanoseconds: 220_000_000)
 
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.42)) {
+                numberOpacity = 1.0
+                numberScale = 1.35
+            }
+
+            try? await Task.sleep(nanoseconds: 280_000_000)
+
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.65)) {
                 numberScale = 1.0
             }
 

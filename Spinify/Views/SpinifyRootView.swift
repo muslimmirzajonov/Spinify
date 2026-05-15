@@ -8,36 +8,29 @@
 import SwiftUI
 import Combine
 
-struct ContentView: View {
+struct SpinifyRootView: View {
     @StateObject private var vm = SpinifyViewModel()
 
     var body: some View {
         ZStack {
             vm.bgColor
                 .ignoresSafeArea()
+                .animation(.easeInOut(duration: 0.5), value: vm.bgColor)
 
-            switch vm.state.screen {
-            case .setup:
+            if vm.state.screen == .setup {
                 SetupView(vm: vm)
                     .transition(.asymmetric(
                         insertion: .move(edge: .leading).combined(with: .opacity),
-                        removal: .move(edge: .trailing).combined(with: .opacity)
+                        removal: .move(edge: .leading).combined(with: .opacity)
                     ))
-            case .spin:
+            } else {
                 SpinView(vm: vm)
                     .transition(.asymmetric(
                         insertion: .move(edge: .trailing).combined(with: .opacity),
-                        removal: .move(edge: .leading).combined(with: .opacity)
+                        removal: .move(edge: .trailing).combined(with: .opacity)
                     ))
             }
         }
-        .animation(.spring(response: 0.5, dampingFraction: 0.85), value: vm.state.screen)
-        .onAppear {
-            HapticManager.shared.playTick()
-        }
+        .onAppear { }
     }
-}
-
-#Preview {
-    ContentView()
 }

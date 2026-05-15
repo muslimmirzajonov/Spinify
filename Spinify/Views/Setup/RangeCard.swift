@@ -25,24 +25,24 @@ struct RangeCard: View {
             Text(label)
                 .font(.system(size: 11, weight: .bold))
                 .tracking(2)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(0.5))
 
             Text("\(Int(value))")
-                .font(.system(size: 48, weight: .black, design: .rounded))
+                .font(.system(size: 52, weight: .black, design: .rounded))
                 .foregroundColor(.white)
                 .contentTransition(.numericText())
-                .animation(.spring(response: 0.3), value: value)
+                .animation(.spring(response: 0.25), value: value)
 
             Slider(value: $value, in: safeRange, step: 1)
                 .tint(.white)
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.white.opacity(0.07))
+        .background(.white.opacity(0.12))
         .cornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(.white.opacity(0.08), lineWidth: 1)
+                .stroke(.white.opacity(0.15), lineWidth: 1)
         )
     }
 }
