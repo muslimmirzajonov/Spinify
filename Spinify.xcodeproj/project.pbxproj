@@ -10,6 +10,7 @@
 		FF0DC83D2FBB21CF0089C8CB /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF0DC83C2FBB21CF0089C8CB /* WidgetKit.framework */; };
 		FF0DC83F2FBB21CF0089C8CB /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF0DC83E2FBB21CF0089C8CB /* SwiftUI.framework */; };
 		FF0DC84E2FBB21D10089C8CB /* SpinifyWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF0DC83A2FBB21CF0089C8CB /* SpinifyWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FF0DC8AB2FBB2D290089C8CB /* SpinifyWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = FF0DC8A12FBB2D280089C8CB /* SpinifyWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -19,6 +20,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF0DC8392FBB21CF0089C8CB;
 			remoteInfo = SpinifyWidgetExtension;
+		};
+		FF0DC8A92FBB2D290089C8CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF69842E2FB5ECD200AE45B1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF0DC8A02FBB2D280089C8CB;
+			remoteInfo = "SpinifyWatch Watch App";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -34,6 +42,17 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF0DC8AF2FBB2D290089C8CB /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				FF0DC8AB2FBB2D290089C8CB /* SpinifyWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +60,7 @@
 		FF0DC83C2FBB21CF0089C8CB /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		FF0DC83E2FBB21CF0089C8CB /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		FF0DC8552FBB230F0089C8CB /* SpinifyWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpinifyWidgetExtension.entitlements; sourceTree = "<group>"; };
+		FF0DC8A12FBB2D280089C8CB /* SpinifyWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SpinifyWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF6984362FB5ECD200AE45B1 /* Spinify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spinify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -60,6 +80,15 @@
 			);
 			target = FF0DC8392FBB21CF0089C8CB /* SpinifyWidgetExtension */;
 		};
+		FF0DC8B42FBB2DEB0089C8CB /* Exceptions for "Spinify" folder in "SpinifyWatch Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localization/L10n.swift,
+				Models/AppState.swift,
+				ViewModels/SpinifyViewModel.swift,
+			);
+			target = FF0DC8A02FBB2D280089C8CB /* SpinifyWatch Watch App */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -71,10 +100,16 @@
 			path = SpinifyWidget;
 			sourceTree = "<group>";
 		};
+		FF0DC8A22FBB2D280089C8CB /* SpinifyWatch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "SpinifyWatch Watch App";
+			sourceTree = "<group>";
+		};
 		FF6984382FB5ECD200AE45B1 /* Spinify */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				FF0DC8572FBB25E70089C8CB /* Exceptions for "Spinify" folder in "SpinifyWidgetExtension" target */,
+				FF0DC8B42FBB2DEB0089C8CB /* Exceptions for "Spinify" folder in "SpinifyWatch Watch App" target */,
 			);
 			path = Spinify;
 			sourceTree = "<group>";
@@ -88,6 +123,13 @@
 			files = (
 				FF0DC83F2FBB21CF0089C8CB /* SwiftUI.framework in Frameworks */,
 				FF0DC83D2FBB21CF0089C8CB /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF0DC89E2FBB2D280089C8CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,6 +158,7 @@
 				FF0DC8552FBB230F0089C8CB /* SpinifyWidgetExtension.entitlements */,
 				FF6984382FB5ECD200AE45B1 /* Spinify */,
 				FF0DC8402FBB21CF0089C8CB /* SpinifyWidget */,
+				FF0DC8A22FBB2D280089C8CB /* SpinifyWatch Watch App */,
 				FF0DC83B2FBB21CF0089C8CB /* Frameworks */,
 				FF6984372FB5ECD200AE45B1 /* Products */,
 			);
@@ -126,6 +169,7 @@
 			children = (
 				FF6984362FB5ECD200AE45B1 /* Spinify.app */,
 				FF0DC83A2FBB21CF0089C8CB /* SpinifyWidgetExtension.appex */,
+				FF0DC8A12FBB2D280089C8CB /* SpinifyWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -155,6 +199,28 @@
 			productReference = FF0DC83A2FBB21CF0089C8CB /* SpinifyWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		FF0DC8A02FBB2D280089C8CB /* SpinifyWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF0DC8AC2FBB2D290089C8CB /* Build configuration list for PBXNativeTarget "SpinifyWatch Watch App" */;
+			buildPhases = (
+				FF0DC89D2FBB2D280089C8CB /* Sources */,
+				FF0DC89E2FBB2D280089C8CB /* Frameworks */,
+				FF0DC89F2FBB2D280089C8CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				FF0DC8A22FBB2D280089C8CB /* SpinifyWatch Watch App */,
+			);
+			name = "SpinifyWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "SpinifyWatch Watch App";
+			productReference = FF0DC8A12FBB2D280089C8CB /* SpinifyWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		FF6984352FB5ECD200AE45B1 /* Spinify */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FF6984412FB5ECD400AE45B1 /* Build configuration list for PBXNativeTarget "Spinify" */;
@@ -163,11 +229,13 @@
 				FF6984332FB5ECD200AE45B1 /* Frameworks */,
 				FF6984342FB5ECD200AE45B1 /* Resources */,
 				FF0DC8532FBB21D10089C8CB /* Embed Foundation Extensions */,
+				FF0DC8AF2FBB2D290089C8CB /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				FF0DC84D2FBB21D10089C8CB /* PBXTargetDependency */,
+				FF0DC8AA2FBB2D290089C8CB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FF6984382FB5ECD200AE45B1 /* Spinify */,
@@ -192,6 +260,9 @@
 					FF0DC8392FBB21CF0089C8CB = {
 						CreatedOnToolsVersion = 26.2;
 					};
+					FF0DC8A02FBB2D280089C8CB = {
+						CreatedOnToolsVersion = 26.2;
+					};
 					FF6984352FB5ECD200AE45B1 = {
 						CreatedOnToolsVersion = 26.2;
 					};
@@ -213,12 +284,20 @@
 			targets = (
 				FF6984352FB5ECD200AE45B1 /* Spinify */,
 				FF0DC8392FBB21CF0089C8CB /* SpinifyWidgetExtension */,
+				FF0DC8A02FBB2D280089C8CB /* SpinifyWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		FF0DC8382FBB21CF0089C8CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF0DC89F2FBB2D280089C8CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -242,6 +321,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF0DC89D2FBB2D280089C8CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FF6984322FB5ECD200AE45B1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +342,11 @@
 			isa = PBXTargetDependency;
 			target = FF0DC8392FBB21CF0089C8CB /* SpinifyWidgetExtension */;
 			targetProxy = FF0DC84C2FBB21D10089C8CB /* PBXContainerItemProxy */;
+		};
+		FF0DC8AA2FBB2D290089C8CB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF0DC8A02FBB2D280089C8CB /* SpinifyWatch Watch App */;
+			targetProxy = FF0DC8A92FBB2D290089C8CB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -273,6 +364,7 @@
 				INFOPLIST_FILE = SpinifyWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SpinifyWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -283,6 +375,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -304,6 +400,7 @@
 				INFOPLIST_FILE = SpinifyWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SpinifyWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -314,11 +411,81 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FF0DC8AD2FBB2D290089C8CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 74J54US3YT;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = SpinifyWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = app.Spinify;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.Spinify.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		FF0DC8AE2FBB2D290089C8CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 74J54US3YT;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = SpinifyWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = app.Spinify;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.Spinify.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Release;
 		};
@@ -458,7 +625,9 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -495,7 +664,9 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -525,6 +696,15 @@
 			buildConfigurations = (
 				FF0DC8512FBB21D10089C8CB /* Debug */,
 				FF0DC8522FBB21D10089C8CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF0DC8AC2FBB2D290089C8CB /* Build configuration list for PBXNativeTarget "SpinifyWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF0DC8AD2FBB2D290089C8CB /* Debug */,
+				FF0DC8AE2FBB2D290089C8CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

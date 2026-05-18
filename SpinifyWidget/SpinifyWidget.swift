@@ -33,12 +33,20 @@ struct SpinifyEntry: TimelineEntry {
     let lastNumber: Int?
     let minValue: Int
     let maxValue: Int
+    let bgColor: Color
 }
 
 struct Provider: AppIntentTimelineProvider {
 
     func placeholder(in context: Context) -> SpinifyEntry {
-        SpinifyEntry(date: .now, configuration: ConfigurationAppIntent(), lastNumber: 42, minValue: 1, maxValue: 100)
+        SpinifyEntry(
+            date: .now,
+            configuration: ConfigurationAppIntent(),
+            lastNumber: 42,
+            minValue: 1,
+            maxValue: 100,
+            bgColor: Color(red: 0.424, green: 0, blue: 1.0)
+        )
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SpinifyEntry {
@@ -53,21 +61,26 @@ struct Provider: AppIntentTimelineProvider {
     private func makeEntry(configuration: ConfigurationAppIntent) -> SpinifyEntry {
         let shared = UserDefaults(suiteName: "group.app.Spinify")
         let lastNumber = shared?.object(forKey: "lastNumber") as? Int
+        let minValue = shared?.object(forKey: "minValue") as? Int ?? 1
+        let maxValue = shared?.object(forKey: "maxValue") as? Int ?? 1000
 
-        let minValue: Int = shared?.object(forKey: "minValue") as? Int ?? 1
-        let maxValue: Int = shared?.object(forKey: "maxValue") as? Int ?? 1000
+        // Rang o'qish — agar yo'q bo'lsa default binafsha
+        let r = shared?.double(forKey: "bgR") ?? 0.424
+        let g = shared?.double(forKey: "bgG") ?? 0.0
+        let b = shared?.double(forKey: "bgB") ?? 1.0
+        let bgColor = Color(red: r, green: g, blue: b)
 
         return SpinifyEntry(
             date: .now,
             configuration: configuration,
             lastNumber: lastNumber,
             minValue: minValue,
-            maxValue: maxValue
+            maxValue: maxValue,
+            bgColor: bgColor
         )
     }
 }
 
-private let widgetBg = Color(red: 0.424, green: 0.0, blue: 1.0)
 
 private func localizedSpin() -> String {
     let code = UserDefaults(suiteName: "group.app.Spinify")?.string(forKey: "spinify_lang_code") ?? "en"
@@ -126,7 +139,7 @@ struct HomeSmallWidgetView: View {
             .buttonStyle(.plain)
         }
         .padding(14)
-        .containerBackground(widgetBg, for: .widget)
+        .containerBackground(entry.bgColor, for: .widget)
     }
 }
 
@@ -193,7 +206,7 @@ struct HomeMediumWidgetView: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
-        .containerBackground(widgetBg, for: .widget)
+        .containerBackground(entry.bgColor, for: .widget)
     }
 }
 

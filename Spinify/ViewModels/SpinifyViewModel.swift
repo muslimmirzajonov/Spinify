@@ -5,9 +5,12 @@
 //  Created by Muslim Mirzajonov on 14/05/26.
 //
 
+#if os(iOS)
+import UIKit
+#endif
 import SwiftUI
-import Combine
 import WidgetKit
+import Combine
 
 @MainActor
 final class SpinifyViewModel: ObservableObject {
@@ -17,20 +20,17 @@ final class SpinifyViewModel: ObservableObject {
     @Published var numberOpacity: Double = 1.0
 
     @Published var langCode: String = {
+        if let saved = UserDefaults(suiteName: "group.app.Spinify")?
+            .string(forKey: "spinify_lang_code"),
+           L10n.supported.contains(where: { $0.code == saved }) {
+            return saved
+        }
         if let saved = UserDefaults.standard.string(forKey: "spinify_lang_code"),
            L10n.supported.contains(where: { $0.code == saved }) {
             return saved
         }
         return L10n.resolvedCode()
-    }() {
-        didSet {
-            UserDefaults.standard.set(langCode, forKey: "spinify_lang_code")
-            
-            let shared = UserDefaults(suiteName: "group.app.Spinify")
-            shared?.set(langCode, forKey: "spinify_lang_code")
-            WidgetCenter.shared.reloadAllTimelines()
-        }
-    }
+    }()
     
     init() {
         let shared = UserDefaults(suiteName: "group.app.Spinify")
@@ -70,9 +70,11 @@ final class SpinifyViewModel: ObservableObject {
     }
 
     func openLanguageSettings() {
+        #if os(iOS)
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
         }
+        #endif
     }
 
     func proceed() {
@@ -142,11 +144,19 @@ final class SpinifyViewModel: ObservableObject {
             }
             try? await Task.sleep(nanoseconds: 130_000_000)
 
+#if os(iOS)
             let shared = UserDefaults(suiteName: "group.app.Spinify")
             shared?.set(finalNumber, forKey: "lastNumber")
             shared?.set(Int(state.minValue), forKey: "minValue")
             shared?.set(Int(state.maxValue), forKey: "maxValue")
+            // Rang saqlash
+            if let components = UIColor(bgColor).cgColor.components, components.count >= 3 {
+                shared?.set(components[0], forKey: "bgR")
+                shared?.set(components[1], forKey: "bgG")
+                shared?.set(components[2], forKey: "bgB")
+            }
             WidgetCenter.shared.reloadAllTimelines()
+#endif
             
             state.currentNumber = finalNumber
             HapticManager.shared.playFinalReveal()
