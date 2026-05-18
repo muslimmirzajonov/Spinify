@@ -15,3 +15,7 @@ struct SpinifyApp: App {
         }
     }
 }
+
+#Preview {
+    SpinifyRootView()
+}

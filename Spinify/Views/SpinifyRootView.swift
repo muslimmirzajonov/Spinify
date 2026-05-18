@@ -31,6 +31,5 @@ struct SpinifyRootView: View {
                     ))
             }
         }
-        .onAppear { }
     }
 }

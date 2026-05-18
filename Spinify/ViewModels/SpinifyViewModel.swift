@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import WidgetKit
 
 @MainActor
 final class SpinifyViewModel: ObservableObject {
@@ -24,7 +25,18 @@ final class SpinifyViewModel: ObservableObject {
     }() {
         didSet {
             UserDefaults.standard.set(langCode, forKey: "spinify_lang_code")
+            
+            let shared = UserDefaults(suiteName: "group.app.Spinify")
+            shared?.set(langCode, forKey: "spinify_lang_code")
+            WidgetCenter.shared.reloadAllTimelines()
         }
+    }
+    
+    init() {
+        let shared = UserDefaults(suiteName: "group.app.Spinify")
+        
+        let code = UserDefaults.standard.string(forKey: "spinify_lang_code") ?? L10n.resolvedCode()
+        shared?.set(code, forKey: "spinify_lang_code")
     }
 
     private let bgPalette: [Color] = [
@@ -130,6 +142,12 @@ final class SpinifyViewModel: ObservableObject {
             }
             try? await Task.sleep(nanoseconds: 130_000_000)
 
+            let shared = UserDefaults(suiteName: "group.app.Spinify")
+            shared?.set(finalNumber, forKey: "lastNumber")
+            shared?.set(Int(state.minValue), forKey: "minValue")
+            shared?.set(Int(state.maxValue), forKey: "maxValue")
+            WidgetCenter.shared.reloadAllTimelines()
+            
             state.currentNumber = finalNumber
             HapticManager.shared.playFinalReveal()
 
