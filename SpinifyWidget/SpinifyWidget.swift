@@ -9,21 +9,6 @@ import WidgetKit
 import SwiftUI
 import AppIntents
 
-// MARK: - Color Extension
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let r = Double((int >> 16) & 0xFF) / 255
-        let g = Double((int >> 8) & 0xFF) / 255
-        let b = Double(int & 0xFF) / 255
-        self.init(red: r, green: g, blue: b)
-    }
-}
-
-// MARK: - Spin App Intent
-
 struct SpinIntent: AppIntent {
     static var title: LocalizedStringResource { "Spin" }
 
@@ -42,8 +27,6 @@ struct SpinIntent: AppIntent {
     }
 }
 
-// MARK: - Entry
-
 struct SpinifyEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationAppIntent
@@ -51,8 +34,6 @@ struct SpinifyEntry: TimelineEntry {
     let minValue: Int
     let maxValue: Int
 }
-
-// MARK: - Provider
 
 struct Provider: AppIntentTimelineProvider {
 
@@ -73,7 +54,6 @@ struct Provider: AppIntentTimelineProvider {
         let shared = UserDefaults(suiteName: "group.app.Spinify")
         let lastNumber = shared?.object(forKey: "lastNumber") as? Int
 
-        // Appda saqlangan range — agar yo'q bo'lsa default 1...1000
         let minValue: Int = shared?.object(forKey: "minValue") as? Int ?? 1
         let maxValue: Int = shared?.object(forKey: "maxValue") as? Int ?? 1000
 
@@ -87,16 +67,12 @@ struct Provider: AppIntentTimelineProvider {
     }
 }
 
-// MARK: - Background
-
 private let widgetBg = Color(red: 0.424, green: 0.0, blue: 1.0)
 
 private func localizedSpin() -> String {
     let code = UserDefaults(suiteName: "group.app.Spinify")?.string(forKey: "spinify_lang_code") ?? "en"
     return L10n.t("lets_spin", code: code)
 }
-
-// MARK: - Home Screen Small
 
 struct HomeSmallWidgetView: View {
     var entry: SpinifyEntry
@@ -128,7 +104,6 @@ struct HomeSmallWidgetView: View {
 
             Spacer()
 
-            // Frosted pill tugma
             Button(intent: SpinIntent()) {
                 HStack(spacing: 5) {
                     Image(systemName: "arrow.trianglehead.2.clockwise")
@@ -155,15 +130,12 @@ struct HomeSmallWidgetView: View {
     }
 }
 
-// MARK: - Home Screen Medium
-
 struct HomeMediumWidgetView: View {
     var entry: SpinifyEntry
 
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
 
-            // Chap: info blok
             VStack(alignment: .leading, spacing: 0) {
                 Text("SPINIFY")
                     .font(.system(size: 9, weight: .bold))
@@ -193,7 +165,6 @@ struct HomeMediumWidgetView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            // O'ng: frosted doira tugma
             Button(intent: SpinIntent()) {
                 ZStack {
                     Circle()
@@ -226,8 +197,6 @@ struct HomeMediumWidgetView: View {
     }
 }
 
-// MARK: - Lock Screen
-
 struct LockScreenWidgetView: View {
     var entry: SpinifyEntry
 
@@ -249,8 +218,6 @@ struct LockScreenWidgetView: View {
     }
 }
 
-// MARK: - Entry View
-
 struct SpinifyWidgetEntryView: View {
     var entry: SpinifyEntry
     @Environment(\.widgetFamily) var family
@@ -268,8 +235,6 @@ struct SpinifyWidgetEntryView: View {
         }
     }
 }
-
-// MARK: - Widget
 
 struct SpinifyWidget: Widget {
     let kind = "SpinifyWidget"
@@ -294,8 +259,6 @@ struct SpinifyWidget: Widget {
     }
 }
 
-// MARK: - Preview
-
 extension ConfigurationAppIntent {
     fileprivate static var preview: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
@@ -303,23 +266,4 @@ extension ConfigurationAppIntent {
         intent.maxValue = 100
         return intent
     }
-}
-
-#Preview(as: .systemSmall) {
-    SpinifyWidget()
-} timeline: {
-    SpinifyEntry(date: .now, configuration: .preview, lastNumber: nil, minValue: 1, maxValue: 100)
-    SpinifyEntry(date: .now, configuration: .preview, lastNumber: 73, minValue: 1, maxValue: 100)
-}
-
-#Preview(as: .systemMedium) {
-    SpinifyWidget()
-} timeline: {
-    SpinifyEntry(date: .now, configuration: .preview, lastNumber: 42, minValue: 1, maxValue: 100)
-}
-
-#Preview(as: .accessoryCircular) {
-    SpinifyWidget()
-} timeline: {
-    SpinifyEntry(date: .now, configuration: .preview, lastNumber: 7, minValue: 1, maxValue: 100)
 }

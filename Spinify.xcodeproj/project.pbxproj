@@ -55,6 +55,7 @@
 		FF0DC8572FBB25E70089C8CB /* Exceptions for "Spinify" folder in "SpinifyWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Extensions/Color+Hex.swift",
 				Localization/L10n.swift,
 			);
 			target = FF0DC8392FBB21CF0089C8CB /* SpinifyWidgetExtension */;
