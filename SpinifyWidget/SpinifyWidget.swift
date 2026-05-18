@@ -64,7 +64,6 @@ struct Provider: AppIntentTimelineProvider {
         let minValue = shared?.object(forKey: "minValue") as? Int ?? 1
         let maxValue = shared?.object(forKey: "maxValue") as? Int ?? 1000
 
-        // Rang o'qish — agar yo'q bo'lsa default binafsha
         let r = shared?.double(forKey: "bgR") ?? 0.424
         let g = shared?.double(forKey: "bgG") ?? 0.0
         let b = shared?.double(forKey: "bgB") ?? 1.0

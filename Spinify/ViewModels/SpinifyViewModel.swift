@@ -11,6 +11,16 @@ import UIKit
 import SwiftUI
 import WidgetKit
 import Combine
+import WatchConnectivity
+
+#if os(iOS)
+private final class WatchSessionDelegate: NSObject, WCSessionDelegate {
+    static let shared = WatchSessionDelegate()
+    func sessionDidBecomeInactive(_ session: WCSession) {}
+    func sessionDidDeactivate(_ session: WCSession) { session.activate() }
+    func session(_ session: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?) {}
+}
+#endif
 
 @MainActor
 final class SpinifyViewModel: ObservableObject {
@@ -20,24 +30,47 @@ final class SpinifyViewModel: ObservableObject {
     @Published var numberOpacity: Double = 1.0
 
     @Published var langCode: String = {
-        if let saved = UserDefaults(suiteName: "group.app.Spinify")?
-            .string(forKey: "spinify_lang_code"),
-           L10n.supported.contains(where: { $0.code == saved }) {
-            return saved
+            if let saved = UserDefaults(suiteName: "group.app.Spinify")?
+                .string(forKey: "spinify_lang_code"),
+               L10n.supported.contains(where: { $0.code == saved }) {
+                return saved
+            }
+            if let saved = UserDefaults.standard.string(forKey: "spinify_lang_code"),
+               L10n.supported.contains(where: { $0.code == saved }) {
+                return saved
+            }
+            return L10n.resolvedCode()
+        }() {
+            didSet {
+                UserDefaults.standard.set(langCode, forKey: "spinify_lang_code")
+
+                let shared = UserDefaults(suiteName: "group.app.Spinify")
+                shared?.set(langCode, forKey: "spinify_lang_code")
+
+                #if os(iOS)
+                WidgetCenter.shared.reloadAllTimelines()
+                if WCSession.isSupported() {
+                    let session = WCSession.default
+                    if session.isPaired && session.isWatchAppInstalled {
+                        try? session.updateApplicationContext(["lang": langCode])
+                    }
+                }
+                #endif
+            }
         }
-        if let saved = UserDefaults.standard.string(forKey: "spinify_lang_code"),
-           L10n.supported.contains(where: { $0.code == saved }) {
-            return saved
+
+        init() {
+            let shared = UserDefaults(suiteName: "group.app.Spinify")
+            let code = UserDefaults.standard.string(forKey: "spinify_lang_code") ?? L10n.resolvedCode()
+            shared?.set(code, forKey: "spinify_lang_code")
+
+            #if os(iOS)
+            if WCSession.isSupported() {
+                WCSession.default.delegate = WatchSessionDelegate.shared
+                WCSession.default.activate()
+            }
+            #endif
         }
-        return L10n.resolvedCode()
-    }()
-    
-    init() {
-        let shared = UserDefaults(suiteName: "group.app.Spinify")
-        
-        let code = UserDefaults.standard.string(forKey: "spinify_lang_code") ?? L10n.resolvedCode()
-        shared?.set(code, forKey: "spinify_lang_code")
-    }
 
     private let bgPalette: [Color] = [
         .init(hex: "#6C00FF"), // electric violet
@@ -149,7 +182,7 @@ final class SpinifyViewModel: ObservableObject {
             shared?.set(finalNumber, forKey: "lastNumber")
             shared?.set(Int(state.minValue), forKey: "minValue")
             shared?.set(Int(state.maxValue), forKey: "maxValue")
-            // Rang saqlash
+            
             if let components = UIColor(bgColor).cgColor.components, components.count >= 3 {
                 shared?.set(components[0], forKey: "bgR")
                 shared?.set(components[1], forKey: "bgG")

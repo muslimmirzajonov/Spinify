@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WatchContentView: View {
     @StateObject private var vm = SpinifyViewModel()
+    @StateObject private var connectivity = WatchConnectivityManager.shared
 
     var body: some View {
         ZStack {
@@ -20,6 +21,12 @@ struct WatchContentView: View {
                 WatchSetupView(vm: vm)
             } else {
                 WatchSpinView(vm: vm)
+            }
+        }
+        .onChange(of: connectivity.receivedLangCode) {
+            if let code = connectivity.receivedLangCode,
+               L10n.supported.contains(where: { $0.code == code }) {
+                vm.langCode = code
             }
         }
     }

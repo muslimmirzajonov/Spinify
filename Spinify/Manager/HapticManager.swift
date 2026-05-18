@@ -51,7 +51,6 @@ final class HapticManager {
         }
     }
 
-    /// Ensure engine is ready before playing
     private func ensureRunning() {
         if !isEngineRunning {
             restartEngine()

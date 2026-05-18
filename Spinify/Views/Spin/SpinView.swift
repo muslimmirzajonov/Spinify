@@ -24,7 +24,6 @@ struct SpinView: View {
         }
     }
 
-    // MARK: Portrait (original logic)
     private var portraitLayout: some View {
         VStack(spacing: 0) {
             Spacer()
@@ -41,10 +40,8 @@ struct SpinView: View {
         }
     }
 
-    // MARK: Landscape
     private var landscapeLayout: some View {
         HStack(spacing: 0) {
-            // Left: number display
             VStack {
                 Spacer()
                 rangeLabel
@@ -57,7 +54,6 @@ struct SpinView: View {
             }
             .frame(maxWidth: .infinity)
 
-            // Right: buttons
             VStack(spacing: 14) {
                 Spacer()
                 spinButtonView
@@ -69,7 +65,6 @@ struct SpinView: View {
         }
     }
 
-    // MARK: Subviews
     private var rangeLabel: some View {
         Text("\(Int(vm.state.minValue)) – \(Int(vm.state.maxValue))")
             .font(.system(size: 12, weight: .bold))

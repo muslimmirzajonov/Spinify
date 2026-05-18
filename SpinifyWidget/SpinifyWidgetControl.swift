@@ -42,7 +42,7 @@ extension SpinifyWidgetControl {
         }
 
         func currentValue(configuration: TimerConfiguration) async throws -> Value {
-            let isRunning = true // Check if the timer is running
+            let isRunning = true 
             return SpinifyWidgetControl.Value(isRunning: isRunning, name: configuration.timerName)
         }
     }

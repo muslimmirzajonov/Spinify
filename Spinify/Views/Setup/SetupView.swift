@@ -14,7 +14,6 @@ struct SetupView: View {
 
     @Environment(\.verticalSizeClass) private var vSizeClass
 
-    // landscape = compact vertical size class
     private var isLandscape: Bool { vSizeClass == .compact }
 
     var body: some View {
@@ -30,7 +29,6 @@ struct SetupView: View {
         }
     }
 
-    // MARK: Portrait
     private var portraitLayout: some View {
         VStack(spacing: 0) {
             topBar
@@ -51,10 +49,8 @@ struct SetupView: View {
         }
     }
 
-    // MARK: Landscape
     private var landscapeLayout: some View {
         HStack(spacing: 0) {
-            // Left column: title + button
             VStack(spacing: 0) {
                 topBar
                     .padding(.horizontal, 20)
@@ -68,7 +64,6 @@ struct SetupView: View {
             }
             .frame(maxWidth: .infinity)
 
-            // Right column: range cards
             VStack(spacing: 12) {
                 fromCard
                 toCard
@@ -79,7 +74,6 @@ struct SetupView: View {
         }
     }
 
-    // MARK: Subviews
     private var topBar: some View {
         HStack {
             Spacer()
