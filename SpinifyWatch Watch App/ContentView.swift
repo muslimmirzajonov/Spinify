@@ -39,11 +39,10 @@ struct WatchSetupView: View {
     
     var body: some View {
         ZStack {
-            Color(red: 0.424, green: 0, blue: 1.0).ignoresSafeArea()
+            Color(vm.bgColor).ignoresSafeArea()
 
             if step == 0 {
                 stepView(
-                    stepNum: "1 / 2",
                     label: vm.t("from"),
                     value: $vm.state.minValue,
                     range: 1...max(2, vm.state.maxValue - 1),
@@ -55,7 +54,6 @@ struct WatchSetupView: View {
                 ))
             } else {
                 stepView(
-                    stepNum: "2 / 2",
                     label: vm.t("to"),
                     value: $vm.state.maxValue,
                     range: max(2, vm.state.minValue + 1)...1000,
@@ -71,18 +69,12 @@ struct WatchSetupView: View {
 
     @ViewBuilder
     private func stepView(
-        stepNum: String,
         label: String,
         value: Binding<Double>,
         range: ClosedRange<Double>,
         isLast: Bool
     ) -> some View {
         VStack(spacing: 0) {
-            Text(stepNum)
-                .font(.system(size: 10, weight: .bold))
-                .tracking(2)
-                .foregroundColor(.white.opacity(0.4))
-                .padding(.top, 6)
 
             Text(label)
                 .font(.system(size: 12, weight: .bold))
@@ -133,7 +125,7 @@ struct WatchSetupView: View {
                     .fill(step == 1 ? Color.white : Color.white.opacity(0.3))
                     .frame(width: 5, height: 5)
             }
-            .padding(.bottom, 8)
+            .padding(.bottom, 12)
 
             Button(action: {
                 if isLast {
@@ -144,9 +136,9 @@ struct WatchSetupView: View {
                     }
                 }
             }) {
-                Text(isLast ? vm.t("lets_spin") : "Next →")
+                Text(isLast ? vm.t("lets_spin") : vm.t("next"))
                     .font(.system(size: 14, weight: .bold, design: .rounded))
-                    .foregroundColor(isLast ? Color(red: 0.424, green: 0, blue: 1.0) : .black)
+                    .foregroundColor(vm.bgColor)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
                     .background(Color.white)
@@ -198,7 +190,6 @@ struct WatchSpinView: View {
 
             Spacer(minLength: 0)
 
-            // Spin button
             Button(action: vm.spin) {
                 ZStack {
                     Text(vm.t("lets_spin"))
@@ -208,7 +199,7 @@ struct WatchSpinView: View {
                     HStack(spacing: 5) {
                         if vm.state.isSpinning {
                             ProgressView()
-                                .tint(.black)
+                                .tint(vm.bgColor)
                                 .scaleEffect(0.7)
                                 .frame(width: 14, height: 14)
                         }

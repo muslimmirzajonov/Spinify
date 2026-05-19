@@ -179,29 +179,29 @@ struct HomeMediumWidgetView: View {
 
             Button(intent: SpinIntent()) {
                 ZStack {
-                    Circle()
+                    RoundedRectangle(cornerRadius: 20)
                         .fill(.white.opacity(0.15))
                         .overlay(
-                            Circle()
+                            RoundedRectangle(cornerRadius: 22)
                                 .stroke(.white.opacity(0.3), lineWidth: 1.5)
                         )
-                        .frame(width: 90, height: 90)
 
                     VStack(spacing: 4) {
                         Image(systemName: "arrow.trianglehead.2.clockwise")
                             .font(.system(size: 22, weight: .semibold))
                             .foregroundColor(.white)
                         Text(localizedSpin())
-                            .font(.system(size: 10, weight: .bold))
-                            .tracking(0.8)
+                            .font(.system(size: 16, weight: .bold))
+//                            .tracking(0.8)
                             .foregroundColor(.white.opacity(0.85))
                             .lineLimit(1)
-                            .minimumScaleFactor(0.7)
-                            .frame(maxWidth: 64)
+//                            .minimumScaleFactor(0.7)
+//                            .frame(maxWidth: 64)
                     }
                 }
             }
             .buttonStyle(.plain)
+
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
