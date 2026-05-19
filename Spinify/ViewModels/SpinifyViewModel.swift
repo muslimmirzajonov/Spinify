@@ -129,82 +129,91 @@ final class SpinifyViewModel: ObservableObject {
         guard !state.isSpinning else { return }
         guard Int(state.minValue) < Int(state.maxValue) else { return }
         state.isSpinning = true
-
+     
+        // Spin boshlashdan oldin oldingi natijani saqla
+        state.previousNumber = state.currentNumber   // <-- yangi
+     
         let finalNumber = Int.random(in: Int(state.minValue)...Int(state.maxValue))
-
+     
         let tickDelays: [UInt64] = [
             200, 160, 120, 90, 65, 48, 38, 32, 28, 28,
             28, 28, 32, 38, 48,
             60, 80, 105, 135, 170, 210, 260
         ]
         let totalTicks = tickDelays.count
-
+     
         spinTask = Task {
             for tick in 0..<totalTicks {
                 guard !Task.isCancelled else { return }
-
+     
                 let delayMs = tickDelays[tick]
-
+     
                 withAnimation(.easeIn(duration: Double(delayMs) * 0.0004)) {
                     numberOpacity = 0.0
                     numberScale = 0.88
                 }
-
+     
                 try? await Task.sleep(nanoseconds: (delayMs / 2) * 1_000_000)
                 guard !Task.isCancelled else { return }
-
+     
                 state.currentNumber = Int.random(in: Int(state.minValue)...Int(state.maxValue))
-
+     
                 withAnimation(.easeOut(duration: Double(delayMs) * 0.0004)) {
                     numberOpacity = 1.0
                     numberScale = 1.0
                 }
-
+     
                 HapticManager.shared.playTick()
-
+     
                 if tick % 3 == 0 {
                     withAnimation(.easeInOut(duration: 0.4)) {
                         bgColor = nextBgColor()
                     }
                 }
-
+     
                 try? await Task.sleep(nanoseconds: (delayMs / 2) * 1_000_000)
             }
-
+     
             withAnimation(.easeIn(duration: 0.12)) {
                 numberOpacity = 0.0
                 numberScale = 0.7
             }
             try? await Task.sleep(nanoseconds: 130_000_000)
-
-#if os(iOS)
+     
+    #if os(iOS)
             let shared = UserDefaults(suiteName: "group.app.Spinify")
+     
+            // Oldingi natijani UserDefaults ga ham saqlash (widget uchun)
+            if let prev = state.previousNumber {
+                shared?.set(prev, forKey: "previousNumber")   // <-- yangi
+            }
+     
             shared?.set(finalNumber, forKey: "lastNumber")
             shared?.set(Int(state.minValue), forKey: "minValue")
             shared?.set(Int(state.maxValue), forKey: "maxValue")
-            
+     
             if let components = UIColor(bgColor).cgColor.components, components.count >= 3 {
                 shared?.set(components[0], forKey: "bgR")
                 shared?.set(components[1], forKey: "bgG")
                 shared?.set(components[2], forKey: "bgB")
             }
             WidgetCenter.shared.reloadAllTimelines()
-#endif
-            
+    #endif
+     
             state.currentNumber = finalNumber
             HapticManager.shared.playFinalReveal()
-
+     
             withAnimation(.spring(response: 0.5, dampingFraction: 0.42)) {
                 numberOpacity = 1.0
                 numberScale = 1.35
             }
-
+     
             try? await Task.sleep(nanoseconds: 280_000_000)
-
+     
             withAnimation(.spring(response: 0.35, dampingFraction: 0.65)) {
                 numberScale = 1.0
             }
-
+     
             state.isSpinning = false
         }
     }

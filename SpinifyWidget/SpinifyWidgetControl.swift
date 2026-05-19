@@ -10,7 +10,7 @@ import SwiftUI
 import WidgetKit
 
 struct SpinifyWidgetControl: ControlWidget {
-    static let kind: String = "app.Spinify.SpinifyWidget"
+    static let kind: String = "app.Spinify.SpinControl"
 
     var body: some ControlWidgetConfiguration {
         AppIntentControlConfiguration(
@@ -42,7 +42,7 @@ extension SpinifyWidgetControl {
         }
 
         func currentValue(configuration: TimerConfiguration) async throws -> Value {
-            let isRunning = true 
+            let isRunning = true
             return SpinifyWidgetControl.Value(isRunning: isRunning, name: configuration.timerName)
         }
     }
@@ -71,7 +71,6 @@ struct StartTimerIntent: SetValueIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        // Start the timer…
         return .result()
     }
 }

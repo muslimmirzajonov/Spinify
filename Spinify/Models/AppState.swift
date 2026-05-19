@@ -14,4 +14,5 @@ struct AppState {
     var maxValue: Double = 1000
     var currentNumber: Int? = nil
     var isSpinning = false
+    var previousNumber: Int? = nil 
 }

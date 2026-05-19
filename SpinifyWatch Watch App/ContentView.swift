@@ -165,6 +165,7 @@ struct WatchSpinView: View {
                 .font(.system(size: 11, weight: .bold))
                 .tracking(1)
                 .foregroundColor(.white.opacity(0.4))
+                .padding(.top, 10)
 
             Spacer(minLength: 0)
 
@@ -186,7 +187,14 @@ struct WatchSpinView: View {
                         .foregroundColor(.white.opacity(0.8))
                 }
             }
-            .frame(height: isSmallWatch ? 55 : 70)
+            .frame(height: isSmallWatch ? 45 : 60)
+
+            
+            Text(vm.state.previousNumber.map { "\(vm.t("last_result")): \($0)" } ?? "–")
+                .font(.system(size: isSmallWatch ? 9 : 10, weight: .semibold))
+                .foregroundColor(.white.opacity(0.38))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
 
             Spacer(minLength: 0)
 
@@ -217,7 +225,6 @@ struct WatchSpinView: View {
             }
             .buttonStyle(.plain)
             .disabled(vm.state.isSpinning)
-
 
             Button(action: vm.goBack) {
                 Text(vm.t("change_range"))

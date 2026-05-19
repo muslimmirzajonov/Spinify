@@ -141,8 +141,10 @@ struct SetupView: View {
             HStack(spacing: 8) {
                 Text(vm.t("lets_spin"))
                     .font(.system(size: 17, weight: .bold, design: .rounded))
+                    .foregroundColor(vm.bgColor)
                 Image(systemName: "arrow.right")
                     .font(.system(size: 15, weight: .bold))
+                    .foregroundColor(vm.bgColor)
             }
             .foregroundColor(.black)
             .frame(maxWidth: .infinity)
