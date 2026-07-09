@@ -87,7 +87,7 @@ struct SpinView: View {
                     .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 8)
                     .shadow(color: .white.opacity(0.15), radius: 40)
             } else {
-                ReadyBadge()
+                ReadyBadge(vm: vm)
             }
         }
     }

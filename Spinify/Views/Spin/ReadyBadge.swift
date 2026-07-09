@@ -9,11 +9,12 @@ import SwiftUI
 import Combine
 
 struct ReadyBadge: View {
+    @ObservedObject var vm: SpinifyViewModel
     @State private var pulse = false
 
     var body: some View {
         VStack(spacing: 8) {
-            Text("READY")
+            Text(vm.t("ready"))
                 .font(.system(size: 24, weight: .black, design: .rounded))
                 .tracking(8)
                 .foregroundColor(.white.opacity(0.9))

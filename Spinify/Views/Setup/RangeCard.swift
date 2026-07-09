@@ -13,6 +13,10 @@ struct RangeCard: View {
     @Binding var value: Double
     let range: ClosedRange<Double>
 
+    @State private var isEditing = false
+    @State private var text = ""
+    @FocusState private var isFocused: Bool
+
     private var safeRange: ClosedRange<Double> {
         let lo = range.lowerBound, hi = range.upperBound
         guard lo < hi else { return lo...(lo + 1) }
@@ -28,11 +32,7 @@ struct RangeCard: View {
                     .tracking(2)
                     .foregroundColor(.white.opacity(0.5))
 
-                Text("\(Int(value))")
-                    .font(.system(size: isCompact ? 32 : 52, weight: .black, design: .rounded))
-                    .foregroundColor(.white)
-                    .contentTransition(.numericText())
-                    .animation(.spring(response: 0.25), value: value)
+                numberField(fontSize: isCompact ? 32 : 52)
 
                 Slider(value: $value, in: safeRange, step: 1)
                     .tint(.white)
@@ -46,5 +46,62 @@ struct RangeCard: View {
                     .stroke(.white.opacity(0.15), lineWidth: 1)
             )
         }
+    }
+
+    @ViewBuilder
+    private func numberField(fontSize: CGFloat) -> some View {
+        if isEditing {
+            TextField("", text: $text)
+                .keyboardType(.numberPad)
+                .font(.system(size: fontSize, weight: .black, design: .rounded))
+                .foregroundColor(.white)
+                .fixedSize()
+                .focused($isFocused)
+                .onSubmit { commit() }
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done") { commit() }
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                }
+                .onChange(of: isFocused) { focused in
+                    if !focused { commit() }
+                }
+        } else {
+            numberText(fontSize: fontSize)
+                .onTapGesture {
+                    text = "\(Int(value))"
+                    isEditing = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                        isFocused = true
+                    }
+                }
+        }
+    }
+
+    @ViewBuilder
+    private func numberText(fontSize: CGFloat) -> some View {
+        if #available(iOS 16.0, *) {
+            Text("\(Int(value))")
+                .font(.system(size: fontSize, weight: .black, design: .rounded))
+                .foregroundColor(.white)
+                .contentTransition(.numericText())
+                .animation(.spring(response: 0.25), value: value)
+        } else {
+            Text("\(Int(value))")
+                .font(.system(size: fontSize, weight: .black, design: .rounded))
+                .foregroundColor(.white)
+                .animation(.spring(response: 0.25), value: value)
+        }
+    }
+
+    private func commit() {
+        let cleaned = text.filter { $0.isNumber }
+        if let parsed = Double(cleaned) {
+            value = min(max(parsed, safeRange.lowerBound), safeRange.upperBound)
+        }
+        isEditing = false
+        isFocused = false
     }
 }

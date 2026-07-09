@@ -24,6 +24,7 @@ struct SetupView: View {
                 portraitLayout
             }
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .sheet(isPresented: $showLanguagePicker) {
             LanguagePickerSheet(vm: vm, isPresented: $showLanguagePicker)
         }
@@ -115,9 +116,9 @@ struct SetupView: View {
             range: 1...max(2, vm.state.maxValue - 1)
         )
         .frame(maxHeight: .infinity)
-        .onChange(of: vm.state.maxValue) {
-            if vm.state.minValue >= vm.state.maxValue {
-                vm.state.minValue = max(1, vm.state.maxValue - 1)
+        .onChange(of: vm.state.maxValue) { newValue in
+            if vm.state.minValue >= newValue {
+                vm.state.minValue = max(1, newValue - 1)
             }
         }
     }
@@ -129,9 +130,9 @@ struct SetupView: View {
             range: max(2, vm.state.minValue + 1)...1000
         )
         .frame(maxHeight: .infinity)
-        .onChange(of: vm.state.minValue) {
-            if vm.state.maxValue <= vm.state.minValue {
-                vm.state.maxValue = vm.state.minValue + 1
+        .onChange(of: vm.state.minValue) { newValue in
+            if vm.state.maxValue <= newValue {
+                vm.state.maxValue = newValue + 1
             }
         }
     }
@@ -153,5 +154,72 @@ struct SetupView: View {
             .clipShape(Capsule())
         }
         .padding(.top, 4)
+    }
+}
+
+struct EditableNumberText: View {
+    @Binding var value: Int
+    let range: ClosedRange<Int>
+    let fontSize: CGFloat
+
+    @State private var isEditing = false
+    @State private var text = ""
+    @FocusState private var isFocused: Bool
+
+    var body: some View {
+        ZStack {
+            if isEditing {
+                TextField("", text: $text)
+                    .keyboardType(.numberPad)
+                    .font(.system(size: fontSize, weight: .black, design: .rounded))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .fixedSize()
+                    .focused($isFocused)
+                    .onSubmit { commit() }
+            } else {
+                numberText
+                    .onTapGesture {
+                        text = "\(value)"
+                        isEditing = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                            isFocused = true
+                        }
+                    }
+            }
+        }
+        .onChange(of: isFocused) { focused in
+            if !focused && isEditing {
+                commit()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var numberText: some View {
+        if #available(iOS 16.0, *) {
+            Text("\(value)")
+                .font(.system(size: fontSize, weight: .black, design: .rounded))
+                .foregroundColor(.white)
+                .contentTransition(.numericText())
+                .animation(.spring(response: 0.25), value: value)
+        } else {
+            Text("\(value)")
+                .font(.system(size: fontSize, weight: .black, design: .rounded))
+                .foregroundColor(.white)
+                .animation(.spring(response: 0.25), value: value)
+        }
+    }
+
+    private func commit() {
+        let cleaned = text.filter { $0.isNumber }
+        if let parsed = Int(cleaned) {
+            let clamped = min(max(parsed, range.lowerBound), range.upperBound)
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                value = clamped
+            }
+        }
+        isEditing = false
+        isFocused = false
     }
 }
